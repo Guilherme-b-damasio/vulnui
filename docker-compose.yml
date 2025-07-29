@@ -1,0 +1,46 @@
+services:
+  zap:
+    image: ghcr.io/zaproxy/zaproxy:stable
+    container_name: zap
+    command: zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true
+    ports:
+      - "8080:8080"
+    networks:
+      - vuln-net
+    environment:
+      - ZAP_API_URL=http://zap:8080
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  nikto:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+    container_name: nikto
+    entrypoint: ["tail", "-f", "/dev/null"]
+    ports:
+      - "5000:5000"
+    networks:
+      - vuln-net
+
+  ui:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    volumes:
+      - ./ui:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    command: npm run dev
+    networks:
+      - vuln-net
+
+
+networks:
+  vuln-net:
+    driver: bridge
