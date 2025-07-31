@@ -18,10 +18,12 @@ services:
 
   nikto:
     build:
-      context: ./docker
+      context: ./nikto
       dockerfile: Dockerfile
     container_name: nikto
-    entrypoint: ["tail", "-f", "/dev/null"]
+    volumes:
+      - ./nikto:/app  # monta a pasta local para dentro do container (útil para dev)
+      - ./nikto/relatorios:/app/relatorios # para salvar relatórios localmente
     ports:
       - "5000:5000"
     networks:

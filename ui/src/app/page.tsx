@@ -15,6 +15,14 @@ export default function Home() {
   const activeScanIdRef = useRef<string | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  const fetchAlerts = async (url: string): Promise<any[]> => {
+    const res = await fetch(`/api/scanner/zap/alerts?url=${encodeURIComponent(url)}`);
+    const data = await res.json();
+    console.log("Alertas do ZAP:", data);
+    return data.alerts || [];
+  };
+
+
   const runScan = async (type: string) => {
     if (!url) return alert("Informe uma URL");
     setLoading(true);
@@ -75,7 +83,9 @@ export default function Home() {
               spiderScanIdRef.current = null;
               activeScanIdRef.current = null;
               setLoading(false);
-              setResult("Scan finalizado com sucesso!");
+              const allAlerts = await fetchAlerts(url);
+              const alerts = allAlerts.filter(alert => alert.risk === 'High');
+              setResult(JSON.stringify(alerts, null, 2));
             }
           } catch {
             clearInterval(intervalRef.current!);

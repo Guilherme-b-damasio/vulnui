@@ -1,7 +1,8 @@
 import axios from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-const baseURL = 'http://localhost:8080';
+// Use host.docker.internal se o Next.js estiver em Docker
+const baseURL = 'http://host.docker.internal:8080';
 const zap = axios.create({ baseURL });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -16,17 +17,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
         // Inicia o spider scan
-        const spider = await zap.get('/JSON/spider/action/scan/', { params: { url } });
+        const spider = await zap.get('/JSON/spider/action/scan/', {
+            params: { url }
+        });
         const spiderScanId = spider.data.scan;
 
         // Inicia o active scan
-        const active = await zap.get('/JSON/ascan/action/scan/', { params: { url, recurse: true } });
+        const active = await zap.get('/JSON/ascan/action/scan/', {
+            params: {
+                url,
+                recurse: 'true',        // precisa ser string
+                inScopeOnly: 'false'    // opcional, mas bom ter
+            }
+        });
         const activeScanId = active.data.scan;
 
         // Retorna os scanIds para o frontend consultar depois
         res.status(200).json({ spiderScanId, activeScanId });
-    } catch (err) {
-        console.error('[ZAP][Erro]', err);
-        res.status(500).json({ error: 'Falha ao iniciar o scan com ZAP.' });
+
+    } catch (err: any) {
+        console.error('[ZAP][Erro]', err.response?.data || err.message);
+        res.status(500).json({
+            error: 'Falha ao iniciar o scan com ZAP.',
+            details: err.response?.data || err.message
+        });
     }
 }
