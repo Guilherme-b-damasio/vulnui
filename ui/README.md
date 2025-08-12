@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# VulnUI - Vulnerability Scanner Dashboard
+
+A modern, comprehensive vulnerability scanning platform built with Next.js 15 and Tailwind CSS 4.
+
+## Features
+
+### 🏠 Dashboard
+- Overview of all scanning activities
+- Quick access to scanners
+- Real-time statistics and metrics
+- Recent activity monitoring
+
+### 🔍 Scanners
+- **OWASP ZAP Scanner**: Comprehensive web application vulnerability scanner
+  - Spider crawling for site discovery
+  - Active scanning for vulnerability detection
+  - Real-time progress tracking
+  - Detailed results display
+
+- **Nikto Scanner**: Web server vulnerability scanner
+  - Server fingerprinting
+  - Known vulnerability detection
+  - Configuration issue identification
+  - Fast scanning capabilities
+
+### 📊 Reports
+- Comprehensive scan result management
+- Historical scan data
+- Vulnerability statistics
+- Export functionality
+- Risk level categorization
+
+## Project Structure
+
+```
+ui/
+├── src/
+│   ├── app/                    # Next.js 15 App Router
+│   │   ├── page.tsx           # Dashboard (Home)
+│   │   ├── scanners/          # Scanner pages
+│   │   │   ├── page.tsx       # Scanners overview
+│   │   │   ├── zap/           # ZAP scanner
+│   │   │   │   └── page.tsx   # ZAP scanner interface
+│   │   │   └── nikto/         # Nikto scanner
+│   │   │       └── page.tsx   # Nikto scanner interface
+│   │   └── reports/           # Reports section
+│   │       └── page.tsx       # Reports and statistics
+│   ├── components/             # Reusable components
+│   │   └── Navigation.tsx     # Shared navigation header
+│   └── api/                   # API routes (existing)
+│       └── scanner/           # Scanner API endpoints
+├── public/                     # Static assets
+└── package.json               # Dependencies
+```
+
+## Technology Stack
+
+- **Framework**: Next.js 15 with App Router
+- **Styling**: Tailwind CSS 4
+- **Language**: TypeScript
+- **Icons**: Heroicons (SVG)
+- **State Management**: React Hooks
 
 ## Getting Started
 
-First, run the development server:
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. **Run development server**:
+   ```bash
+   npm run dev
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. **Open your browser**:
+   Navigate to [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - Start development server with Turbopack
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
 
-## Learn More
+## API Integration
 
-To learn more about Next.js, take a look at the following resources:
+The frontend integrates with existing backend APIs:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **ZAP Scanner**: `/api/scanner/zap/*`
+- **Nikto Scanner**: `/api/scanner/nikto`
+- **Scan Status**: Real-time progress tracking
+- **Results**: Vulnerability data and alerts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Design Features
 
-## Deploy on Vercel
+- **Responsive Design**: Mobile-first approach with Tailwind CSS
+- **Modern UI**: Clean, professional interface
+- **Navigation**: Consistent header across all pages
+- **Progress Tracking**: Real-time scan progress indicators
+- **Data Visualization**: Statistics and metrics display
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Future Enhancements
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [ ] Additional scanner integrations
+- [ ] Advanced reporting and analytics
+- [ ] User authentication and management
+- [ ] Scan scheduling and automation
+- [ ] Custom scan configurations
+- [ ] Integration with CI/CD pipelines
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## License
+
+This project is part of the VulnUI vulnerability scanning platform.
