@@ -1,9 +1,0 @@
-# VulnScanner - Orquestrador simples de scanners OWASP ZAP e Nikto
-
-## Como usar
-
-1. Configure OWASP ZAP com API ativada e atualize a API key em `cli.py`.
-2. Instale Nikto e garanta que o comando `nikto` esteja no PATH.
-3. Instale dependências: `pip install -r requirements.txt`
-4. Rode: `python cli.py`
-5. Informe a URL para escanear e aguarde os resultados.
