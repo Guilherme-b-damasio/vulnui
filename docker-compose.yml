@@ -2,7 +2,12 @@ services:
   zap:
     image: ghcr.io/zaproxy/zaproxy:stable
     container_name: zap
-    command: zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true
+    command: >
+      zap.sh -daemon -host 0.0.0.0 -port 8080
+      -config api.disablekey=true
+      -config api.addrs.addr.name=.*
+      -config api.addrs.addr.regex=true
+      -addoninstall openapi
     ports:
       - "8080:8080"
     networks:
@@ -22,12 +27,20 @@ services:
       dockerfile: Dockerfile
     container_name: nikto
     volumes:
-      - ./nikto:/app  # monta a pasta local para dentro do container (útil para dev)
-      - ./nikto/relatorios:/app/relatorios # para salvar relatórios localmente
+      - ./nikto/relatorios:/app/relatorios
     ports:
       - "5000:5000"
     networks:
       - vuln-net
+    environment:
+      - FLASK_ENV=production
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
 
   ui:
     build:
@@ -38,10 +51,17 @@ services:
       - /app/node_modules
     ports:
       - "3000:3000"
-    command: npm run dev
+    command: npm run dev:edge
     networks:
       - vuln-net
-
+    environment:
+      - NIKTO_SERVICE_URL=http://nikto:5000
+      - ZAP_API_URL=http://zap:8080
+    depends_on:
+      nikto:
+        condition: service_healthy
+      zap:
+        condition: service_healthy
 
 networks:
   vuln-net:
